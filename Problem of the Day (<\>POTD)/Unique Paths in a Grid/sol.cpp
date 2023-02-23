@@ -1,5 +1,7 @@
+
 class Solution {
-    static int uniquePaths(int n, int m, int[][] grid) {
+  public:
+    int uniquePaths(int n, int m, vector<vector<int>> &grid) {
         // we have to find zero
         int mod = (int)1e9+7;
         vector<vector<int>> paths(n, vector<int>(m, 0));
