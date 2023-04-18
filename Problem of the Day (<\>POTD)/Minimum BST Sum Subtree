@@ -1,0 +1,61 @@
+//User function Template for C++
+// Statement: 
+// Given a binary tree and a target, find the number of node in the minimum 
+// sub-tree with the given sum equal to the target which is also a binary search tree.
+class Solution {
+public:
+    int mini= INT_MAX;
+    bool checkBST(Node *root, int minVal, int maxVal){
+        if(root==NULL){
+            return true;
+        }
+        if(root->data < minVal || root->data > maxVal){
+            return false;
+        }
+        //keep checking for both sides iteratively for the further tree
+        //left should values smaller that current data to check for BST
+        // right should have values larger that current data value to check for BST
+        return checkBST(root->left, minVal, root->data-1) && checkBST(root->right, root->data +1, maxVal);
+    }
+    int sum(Node *root, int &count){
+        if(root==NULL){
+            return 0;
+        }
+        if(root->left==NULL && root->right== NULL){ // if null on both  side
+            count++; // increase count and return the current data as sum
+            return root->data;
+        }
+        count++;
+        // return the sum of left and right
+        return root->data +sum(root->left,count) + sum(root->right,count);
+    }
+    void solve(Node *root, int target){
+        if(root==NULL){
+            return ;
+        }
+        if(root->left==NULL && root->right==NULL){ //if both side null then can't continue
+            if(root->data== target){ // if target is also matching 
+                mini = 1;
+                return ;
+            }
+        }
+        if(checkBST(root, INT_MIN,INT_MAX)){ // if BST
+            int count = 0;
+            int s = sum(root,count); // returns the current sum
+            if(s == target){
+                //here count refers to number of nodes in subtree BST
+                mini = min(mini,count); // keep storing the minimum  nodde count only
+            }
+        }
+        // recurse for both the directions
+        solve(root->left, target);
+        solve(root->right,target);
+    }
+    int minSubtreeSumBST(int target, Node *root) {
+       solve(root,target);
+       if(mini==INT_MAX){
+           return -1;
+       }
+       return mini;
+    }
+};
